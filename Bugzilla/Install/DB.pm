@@ -809,7 +809,15 @@ sub update_table_definitions {
   $dbh->bz_add_column('profiles', 'bounce_count', {TYPE => 'INT1', NOTNULL => 1, DEFAULT => 0});
 
   # Bug 1588221 - dkl@mozilla.com
+  $dbh->bz_alter_column('bugs_activity', 'attach_id', {TYPE => 'INT5'});
+  $dbh->bz_alter_column('attachments', 'attach_id',
+    {TYPE => 'BIGSERIAL', NOTNULL => 1, PRIMARYKEY => 1});
+  $dbh->bz_alter_column('attach_data', 'id',
+    {TYPE => 'INT5', NOTNULL => 1, PRIMARYKEY => 1});
+  $dbh->bz_alter_column('flags',            'attach_id', {TYPE => 'INT5'});
+  $dbh->bz_alter_column('user_request_log', 'attach_id', {TYPE => 'INT5', NOTNULL => 0});
   _populate_attachment_storage_class();
+
 
   ################################################################
   # New --TABLE-- changes should go *** A B O V E *** this point #
