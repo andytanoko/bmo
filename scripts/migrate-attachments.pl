@@ -21,7 +21,7 @@ use Getopt::Long qw(GetOptions);
 my @storage_names = Bugzilla::Attachment->get_storage_names();
 
 my %options;
-GetOptions(\%options, 'migrate=s@{2}', 'mirror=s@{2}', 'copy=s@{2}', 'delete=s') or exit(1);
+GetOptions(\%options, 'migrate=s@{2}', 'mirror=s@{2}', 'copy=s@{2}', 'delete=s') or exit 1;
 unless ($options{migrate} || $options{mirror} || $options{copy} || $options{delete}) {
   die <<EOF;
 Syntax:
@@ -75,8 +75,8 @@ if ($options{migrate}) {
   my ($source, $dest) = @{$options{migrate}};
 
   my ($total) = $dbh->selectrow_array("SELECT COUNT(*) FROM attachments");
-  confirm(sprintf(
-    'Migrate %s attachments from %s to %s?', $total, @{$options{migrate}}));
+  confirm(sprintf
+    'Migrate %s attachments from %s to %s?', $total, @{$options{migrate}});
 
   my $sth
     = $dbh->prepare("SELECT attach_id FROM attachments ORDER BY attach_id DESC");
@@ -107,8 +107,8 @@ if ($options{mirror}) {
   my ($source, $dest) = @{$options{mirror}};
 
   my ($total) = $dbh->selectrow_array("SELECT COUNT(*) FROM attachments");
-  confirm(sprintf(
-    'Mirror %s attachments from %s to %s?', $total, @{$options{mirror}}));
+  confirm(sprintf
+    'Mirror %s attachments from %s to %s?', $total, @{$options{mirror}});
 
   my $sth
     = $dbh->prepare("SELECT attach_id FROM attachments ORDER BY attach_id DESC");
@@ -148,8 +148,8 @@ elsif ($options{copy}) {
   my ($total)
     = $dbh->selectrow_array(
     "SELECT COUNT(*) FROM attachments WHERE attach_size != 0");
-  confirm(sprintf(
-    'Copy %s attachments from %s to %s?', $total, @{$options{copy}}));
+  confirm(sprintf
+    'Copy %s attachments from %s to %s?', $total, @{$options{copy}});
 
   my $sth
     = $dbh->prepare(
@@ -179,7 +179,7 @@ elsif ($options{delete}) {
   my ($total)
     = $dbh->selectrow_array(
     "SELECT COUNT(*) FROM attachments WHERE attach_size != 0");
-  confirm(sprintf('DELETE %s attachments from %s?', $total, $options{delete}));
+  confirm(sprintf 'DELETE %s attachments from %s?', $total, $options{delete});
 
   my $sth
     = $dbh->prepare(
@@ -204,5 +204,5 @@ elsif ($options{delete}) {
 sub confirm {
   my ($prompt) = @_;
   print $prompt, "\n\nPress <Ctrl-C> to stop or <Enter> to continue..\n";
-  getc();
+  getc;
 }

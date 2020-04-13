@@ -19,28 +19,28 @@ sub data_type { return 'filesystem'; }
 sub set_data {
   my ($self, $data) = @_;
   my $path = $self->_local_path();
-  mkdir($path, 0770) unless -d $path;
-  open(my $fh, '>', $self->_local_file());
-  binmode($fh);
+  mkdir $path, 0770 unless -d $path;
+  open my $fh, '>', $self->_local_file();
+  binmode $fh;
   print $fh $data;
-  close($fh);
+  close $fh;
   return $self;
 }
 
 sub get_data {
   my ($self) = @_;
-  if (open(my $fh, '<', $self->_local_file())) {
+  if (open my $fh, '<', $self->_local_file()) {
     local $/;
-    binmode($fh);
+    binmode $fh;
     my $data = <$fh>;
-    close($fh);
+    close $fh;
     return $data;
   }
 }
 
 sub remove_data {
   my ($self) = @_;
-  unlink($self->_local_file());
+  unlink $self->_local_file();
   return $self;
 }
 
@@ -51,7 +51,7 @@ sub data_exists {
 
 sub _local_path {
   my ($self) = @_;
-  my $hash = sprintf('group.%03d', $self->attachment->id % 1000);
+  my $hash = sprintf 'group.%03d', $self->attachment->id % 1000;
   return bz_locations()->{attachdir} . '/' . $hash;
 }
 
